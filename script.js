@@ -2157,7 +2157,7 @@ function loadGameScreen() {
     }
 
 
-    // Keep desktop gameplay fixed; mobile layouts scroll to fit touch controls.
+    // Keep mobile landscape gameplay within one viewport; portrait layouts can scroll.
     document.body.classList.add('gameScreenActive');
 
     // If continuing a saved game, update properties and go to next level
