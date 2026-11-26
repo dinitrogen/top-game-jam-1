@@ -6,6 +6,37 @@ import { levels } from './levels.js';
 import { notesLibrary } from './note-library.js';
 import { maps } from './maps.js';
 
+function createMenuIconButton(dialogId) {
+    const menuButton = document.createElement('button');
+    menuButton.type = 'button';
+    menuButton.classList.add('gameMenuButton');
+    menuButton.setAttribute('aria-label', 'Open menu');
+    menuButton.setAttribute('aria-haspopup', 'dialog');
+    menuButton.setAttribute('aria-controls', dialogId);
+    menuButton.setAttribute('aria-expanded', 'false');
+    for (let i = 0; i < 3; i++) {
+        const line = document.createElement('span');
+        line.setAttribute('aria-hidden', 'true');
+        menuButton.appendChild(line);
+    }
+    return menuButton;
+}
+
+async function exitGame(message) {
+    if (Capacitor.getPlatform() === 'android') {
+        try {
+            await App.exitApp();
+        } catch (error) {
+            console.error('Unable to exit the game.', error);
+            message.textContent = 'Unable to exit. Close the app from Android.';
+        }
+    } else if (Capacitor.getPlatform() === 'ios') {
+        message.textContent = 'Use the iOS app switcher to close Melody Quest.';
+    } else {
+        message.textContent = 'Close this browser tab to exit the game.';
+    }
+}
+
 
 // Main game screen loader
 function loadGameScreen() {
@@ -196,18 +227,7 @@ function loadGameScreen() {
     mobileControls.appendChild(directionPad);
     mobileControls.appendChild(actionButton);
 
-    const menuButton = document.createElement('button');
-    menuButton.type = 'button';
-    menuButton.classList.add('gameMenuButton');
-    menuButton.setAttribute('aria-label', 'Open game menu');
-    menuButton.setAttribute('aria-haspopup', 'dialog');
-    menuButton.setAttribute('aria-controls', 'gameMenuDialog');
-    menuButton.setAttribute('aria-expanded', 'false');
-    for (let i = 0; i < 3; i++) {
-        const line = document.createElement('span');
-        line.setAttribute('aria-hidden', 'true');
-        menuButton.appendChild(line);
-    }
+    const menuButton = createMenuIconButton('gameMenuDialog');
 
     const gameMenuDialog = document.createElement('dialog');
     gameMenuDialog.classList.add('gameMenuDialog');
@@ -235,19 +255,7 @@ function loadGameScreen() {
     exitGameButton.type = 'button';
     exitGameButton.classList.add('gameMenuOption');
     exitGameButton.textContent = 'Exit Game';
-    exitGameButton.addEventListener('click', async () => {
-        if (Capacitor.isNativePlatform()) {
-            try {
-                await App.exitApp();
-            } catch (error) {
-                console.error('Unable to exit the game.', error);
-                gameMenuMessage.textContent = 'Unable to exit. Close the app from Android.';
-            }
-            return;
-        }
-
-        gameMenuMessage.textContent = 'Close this browser tab to exit the game.';
-    });
+    exitGameButton.addEventListener('click', () => exitGame(gameMenuMessage));
 
     const resumeButton = document.createElement('button');
     resumeButton.type = 'button';
@@ -2623,11 +2631,58 @@ function loadTitleScreen() {
     const spacerDiv = createSpacerDiv();
     const footerDiv = createFooterDiv();
 
+    const menuButton = createMenuIconButton('titleMenuDialog');
+    const menuDialog = document.createElement('dialog');
+    menuDialog.classList.add('gameMenuDialog');
+    menuDialog.id = 'titleMenuDialog';
+    menuDialog.setAttribute('aria-labelledby', 'titleMenuHeading');
+
+    const menuHeading = document.createElement('h2');
+    menuHeading.id = 'titleMenuHeading';
+    menuHeading.textContent = 'Menu';
+
+    const menuMessage = document.createElement('p');
+    menuMessage.classList.add('gameMenuMessage');
+    menuMessage.setAttribute('role', 'status');
+
+    const menuActions = document.createElement('div');
+    menuActions.classList.add('gameMenuActions');
+
+    const exitButton = document.createElement('button');
+    exitButton.type = 'button';
+    exitButton.classList.add('gameMenuOption');
+    exitButton.textContent = 'Exit Game';
+    exitButton.addEventListener('click', () => exitGame(menuMessage));
+
+    const closeButton = document.createElement('button');
+    closeButton.type = 'button';
+    closeButton.classList.add('gameMenuOption');
+    closeButton.textContent = 'Close';
+    closeButton.addEventListener('click', () => menuDialog.close());
+
+    menuActions.appendChild(exitButton);
+    menuActions.appendChild(closeButton);
+    menuDialog.appendChild(menuHeading);
+    menuDialog.appendChild(menuMessage);
+    menuDialog.appendChild(menuActions);
+
+    menuButton.addEventListener('click', () => {
+        menuMessage.textContent = '';
+        menuButton.setAttribute('aria-expanded', 'true');
+        menuDialog.showModal();
+    });
+    menuDialog.addEventListener('close', () => {
+        menuButton.setAttribute('aria-expanded', 'false');
+        menuButton.focus();
+    });
+
     content.appendChild(titleScreenContent);
     titleScreenContent.appendChild(titleLogoDiv);
     titleScreenContent.appendChild(startButtonDiv);
     titleScreenContent.appendChild(spacerDiv);
     titleScreenContent.appendChild(footerDiv);
+    titleScreenContent.appendChild(menuButton);
+    titleScreenContent.appendChild(menuDialog);
 }
 
 // Variable to toggle practice mode
