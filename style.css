@@ -1379,21 +1379,23 @@ body.gameScreenActive {
     }
 
     .staffDiv {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 2px;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: nowrap;
+        gap: 4px;
         width: 100%;
         padding-top: 3px;
     }
 
     .staffPromptLabel {
-        font-size: clamp(9px, 1.3vw, 12px);
+        flex: 0 0 54%;
+        font-size: clamp(7px, 0.9vw, 9px);
     }
 
     .svgNote {
-        width: auto;
-        height: clamp(62px, 16vh, 80px);
-        max-width: 100%;
+        width: 42%;
+        height: auto;
+        max-width: 42%;
     }
 
     .heart {
