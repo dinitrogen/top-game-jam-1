@@ -30,6 +30,10 @@ body, html, #content {
     cursor: url(./img/map-icons/cursor-arrow.svg), auto;
 }
 
+body.gameScreenActive {
+    position: fixed;
+}
+
 .howToPlayScreenContent, .highScoresScreenContent {
     padding: 50px 200px 100px 200px;
     background-color: rgb(202, 202, 202);
@@ -713,6 +717,237 @@ body, html, #content {
     -ms-animation: fadeIn 1s;
     animation: blink 0.2s infinite;
 }
+
+.mobileControls {
+    display: none;
+}
+
+@media (max-width: 900px), (pointer: coarse) {
+    body {
+        max-width: none;
+        padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) 8px
+            max(8px, env(safe-area-inset-left));
+    }
+
+    body.gameScreenActive {
+        position: static;
+    }
+
+    body,
+    html,
+    #content {
+        height: auto;
+        min-height: 100%;
+    }
+
+    #gameScreenContent {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-areas:
+            "map map"
+            "left right"
+            "controls controls";
+        gap: 12px;
+        align-items: start;
+    }
+
+    .gameScreenSection {
+        min-width: 0;
+        margin: 0;
+    }
+
+    .gameScreenSectionLeft {
+        grid-area: left;
+    }
+
+    .gameScreenSectionCenter {
+        grid-area: map;
+        align-items: center;
+        min-width: 0;
+    }
+
+    .gameScreenSectionRight {
+        grid-area: right;
+    }
+
+    .gameMapContainer {
+        width: min(100%, 70vh);
+        height: auto;
+        aspect-ratio: 1;
+        justify-content: center;
+        background-size: 100% 100% !important;
+    }
+
+    .gameMap {
+        width: 80%;
+        height: 80%;
+        margin: 0;
+        grid-template-columns: repeat(var(--gridSize), minmax(0, 1fr));
+    }
+
+    .gameTile {
+        box-sizing: border-box;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: clamp(8px, 2.4vw, 16px);
+        line-height: 1;
+        border-width: max(1px, 0.3vw);
+    }
+
+    .hero,
+    .enemy,
+    .note-blue,
+    .note-green,
+    .note-orange,
+    .note-purple,
+    .note-red,
+    .note-yellow,
+    .stairsTile,
+    .stairsUpTile {
+        background-size: 72% 72%;
+    }
+
+    .mobileControls {
+        grid-area: controls;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: clamp(20px, 8vw, 56px);
+        padding: 8px 0 max(16px, env(safe-area-inset-bottom));
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .directionPad {
+        display: grid;
+        grid-template-columns: repeat(3, clamp(56px, 16vw, 72px));
+        grid-template-rows: repeat(2, clamp(56px, 16vw, 72px));
+        grid-template-areas:
+            ". up ."
+            "left down right";
+        gap: 4px;
+    }
+
+    .mobileControlButton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 56px;
+        min-height: 56px;
+        border: 3px solid #301800;
+        border-radius: 8px;
+        background: #cacaca;
+        color: #111;
+        font-family: "Press Start 2P", sans-serif;
+        font-size: clamp(16px, 5vw, 24px);
+        box-shadow: 0 4px 0 #301800;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobileControlButton:active {
+        transform: translateY(3px);
+        box-shadow: 0 1px 0 #301800;
+        background: #fff;
+    }
+
+    .controlUp {
+        grid-area: up;
+    }
+
+    .controlLeft {
+        grid-area: left;
+    }
+
+    .controlDown {
+        grid-area: down;
+    }
+
+    .controlRight {
+        grid-area: right;
+    }
+
+    .controlAction {
+        min-width: 84px;
+        padding: 0 8px;
+        font-size: clamp(9px, 2.8vw, 13px);
+    }
+
+    #levelDisplay,
+    #levelNameDisplay,
+    #scoreDisplay,
+    .noteStreakDiv,
+    .spellChargedTextDiv,
+    .multiplierHeader,
+    .multiplierDiv,
+    .levelProgressDiv,
+    #lifeDisplay,
+    #spellDisplay,
+    #bossDisplay,
+    .timerDisplay {
+        max-width: 100%;
+        font-size: clamp(11px, 2.8vw, 16px);
+        overflow-wrap: anywhere;
+    }
+
+    .multiplierBorder,
+    .levelProgressBorder,
+    .spellBarBorder,
+    .bossBarBorder,
+    .timerBarBorder {
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .staffDiv,
+    .practiceStaff {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .titleLogo {
+        width: min(100%, 800px);
+    }
+
+    #nameInput {
+        box-sizing: border-box;
+        width: min(100%, 450px);
+        font-size: clamp(14px, 4vw, 24px);
+    }
+
+    .howToPlayScreenContent,
+    .highScoresScreenContent {
+        padding: 24px 12px 48px;
+        font-size: clamp(12px, 3vw, 18px);
+    }
+
+    .endingGraphic {
+        width: min(100%, 900px);
+    }
+
+    .endGameOverlay {
+        box-sizing: border-box;
+        padding: 20vh 12px 12px;
+        font-size: clamp(24px, 8vw, 56px);
+    }
+
+    .gameOverScore {
+        padding: 20px 8px;
+        font-size: clamp(14px, 4vw, 24px);
+    }
+
+    .continueNote,
+    .gameOverButton {
+        font-size: clamp(12px, 3.5vw, 20px);
+    }
+}
+
 .note-red {
     background: url(img/map-icons/note-red.svg);
     background-color: var(--tileColor);
@@ -895,4 +1130,15 @@ body, html, #content {
 @font-face {
     font-family: "Press Start 2P";
     src: url("./fonts/PressStart2P-Regular.ttf") format("truetype");
+}
+
+@media (max-width: 900px), (pointer: coarse) {
+    .note-red,
+    .finalBoss,
+    .finalBossArmRight,
+    .finalBossArmBottom,
+    .finalBossArmLeft,
+    .finalBossArmTop {
+        background-size: 72% 72%;
+    }
 }

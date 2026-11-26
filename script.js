@@ -12,16 +12,13 @@ function loadGameScreen() {
     gameScreenContent.setAttribute('id', 'gameScreenContent');
 
     const leftContent = document.createElement('div');
-    leftContent.setAttribute('class', 'gameScreenSection');
-    leftContent.setAttribute('class', 'gameScreenSectionLeft');
+    leftContent.classList.add('gameScreenSection', 'gameScreenSectionLeft');
 
     const centerContent = document.createElement('div');
-    centerContent.setAttribute('class', 'gameScreenSection');
-    centerContent.setAttribute('class', 'gameScreenSectionCenter');
+    centerContent.classList.add('gameScreenSection', 'gameScreenSectionCenter');
 
     const rightContent = document.createElement('div');
-    rightContent.setAttribute('class', 'gameScreenSection');
-    rightContent.setAttribute('class', 'gameScreenSectionRight');
+    rightContent.classList.add('gameScreenSection', 'gameScreenSectionRight');
 
     let logo = document.createElement('object');
     logo.setAttribute('data', `./img/graphics/logo.svg`);
@@ -165,6 +162,38 @@ function loadGameScreen() {
     gameMap.setAttribute('class', 'gameMap');
     gameMapContainer.appendChild(gameMap);
 
+    const mobileControls = document.createElement('div');
+    mobileControls.classList.add('mobileControls');
+    mobileControls.setAttribute('aria-label', 'Touch controls');
+
+    const directionPad = document.createElement('div');
+    directionPad.classList.add('directionPad');
+
+    [
+        { label: 'Up', code: 'ArrowUp', icon: '↑', className: 'controlUp' },
+        { label: 'Left', code: 'ArrowLeft', icon: '←', className: 'controlLeft' },
+        { label: 'Down', code: 'ArrowDown', icon: '↓', className: 'controlDown' },
+        { label: 'Right', code: 'ArrowRight', icon: '→', className: 'controlRight' }
+    ].forEach(({ label, code, icon, className }) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.classList.add('mobileControlButton', className);
+        button.setAttribute('aria-label', label);
+        button.textContent = icon;
+        button.addEventListener('click', () => handlePlayerAction(code));
+        directionPad.appendChild(button);
+    });
+
+    const actionButton = document.createElement('button');
+    actionButton.type = 'button';
+    actionButton.classList.add('mobileControlButton', 'controlAction');
+    actionButton.setAttribute('aria-label', 'Action: select note or use item');
+    actionButton.textContent = 'Action';
+    actionButton.addEventListener('click', () => handlePlayerAction('Space'));
+
+    mobileControls.appendChild(directionPad);
+    mobileControls.appendChild(actionButton);
+
     const content = document.getElementById('content');
     content.textContent = '';
 
@@ -195,6 +224,7 @@ function loadGameScreen() {
     gameScreenContent.appendChild(leftContent);
     gameScreenContent.appendChild(centerContent);
     gameScreenContent.appendChild(rightContent);
+    gameScreenContent.appendChild(mobileControls);
 
     content.appendChild(gameScreenContent);
 
@@ -365,7 +395,7 @@ function loadGameScreen() {
     let finalBossTileIndex;
     let finalBossTileIndices = [];
 
-    document.addEventListener('keydown', movePlayer)
+    document.addEventListener('keydown', (event) => handlePlayerAction(event.code, event));
 
     function useKey(tileIndex) {
         let lockedTile = document.querySelector(`#tile${tileIndex}`);
@@ -374,7 +404,7 @@ function loadGameScreen() {
         keyDisplay.removeChild(keyDisplay.firstChild);
     }
 
-    function movePlayer(event) {
+    function handlePlayerAction(code, event) {
         let previousTileIndex = activeTileIndex,
             leftTile = (activeTileIndex % gridSize === 0) ? undefined : document.querySelector(`#tile${activeTileIndex - 1}`),
             rightTile = ((activeTileIndex + 1) % gridSize === 0) ? undefined : document.querySelector(`#tile${activeTileIndex + 1}`),
@@ -385,7 +415,7 @@ function loadGameScreen() {
             return;
         }
 
-        if (event.code === "ArrowLeft") {
+        if (code === "ArrowLeft") {
             if (activeTileIndex === 0 || activeTileIndex % gridSize === 0 || activeTile.classList.contains('wall-left') || (leftTile && (leftTile.classList.contains('locked-tile') && !haveKey))) {
                 return;
             } else {
@@ -402,7 +432,7 @@ function loadGameScreen() {
                 }
 
             }
-        } else if (event.code === "ArrowRight") {
+        } else if (code === "ArrowRight") {
             if (activeTileIndex === gridArea - 1 || (activeTileIndex + 1) % gridSize === 0 || activeTile.classList.contains('wall-right') || (rightTile && (rightTile.classList.contains('locked-tile') && !haveKey))) {
                 return;
             } else {
@@ -417,7 +447,7 @@ function loadGameScreen() {
                     return;
                 }
             }
-        } else if (event.code === "ArrowUp") {
+        } else if (code === "ArrowUp") {
             if (activeTileIndex < gridSize || activeTile.classList.contains('wall-top') || (upTile && (upTile.classList.contains('locked-tile') && !haveKey))) {
                 return;
             } else {
@@ -433,7 +463,7 @@ function loadGameScreen() {
                     return;
                 }
             }
-        } else if (event.code === "ArrowDown") {
+        } else if (code === "ArrowDown") {
             if (activeTileIndex >= gridArea - gridSize || activeTile.classList.contains('wall-bottom') || (downTile && (downTile.classList.contains('locked-tile') && !haveKey))) {
                 return;
             } else {
@@ -449,8 +479,8 @@ function loadGameScreen() {
                     return;
                 }
             }
-        } else if (event.code === "Space") {
-            event.preventDefault();
+        } else if (code === "Space") {
+            event?.preventDefault();
             if (stairsOn) {
                 return;
 
@@ -2127,8 +2157,8 @@ function loadGameScreen() {
     }
 
 
-    // Disable scrolling on game screen
-    document.body.style.position = 'fixed';
+    // Keep desktop gameplay fixed; mobile layouts scroll to fit touch controls.
+    document.body.classList.add('gameScreenActive');
 
     // If continuing a saved game, update properties and go to next level
     if (continueGameStatus) {

@@ -3,6 +3,9 @@
 <head>
     <link rel="stylesheet" href="./style.css">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#cacaca">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Melody Quest</title>
     
     <!-- music prefetches-->
@@ -37,8 +40,10 @@
     <script src="./audio.js"></script>
     <script src="./save-data.js"></script>
     <script type="module" src="./script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.26/Tone.js"></script>
+    <script src="./vendor/Tone.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.26/Tone.js'"></script>
+    <script>
+        document.addEventListener('pointerdown', () => Tone.start(), { once: true });
+    </script>
 
 </body>
-
 </html>

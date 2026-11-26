@@ -24,6 +24,9 @@ function loadHowToPlayScreen() {
     const controlsText2 = document.createElement('p');
     controlsText2.textContent = 'Space bar: Select letter / Pickup item / Cast spell'
 
+    const controlsText3 = document.createElement('p');
+    controlsText3.textContent = 'On mobile: use the on-screen arrows and Action button'
+
     const directionsHeader = document.createElement('h2');
     directionsHeader.textContent = 'INSTRUCTIONS';
 
@@ -105,6 +108,7 @@ function loadHowToPlayScreen() {
     howToPlayScreenContent.appendChild(controlsHeader);
     howToPlayScreenContent.appendChild(controlsText);
     howToPlayScreenContent.appendChild(controlsText2);
+    howToPlayScreenContent.appendChild(controlsText3);
     howToPlayScreenContent.appendChild(directionsHeader);
     howToPlayScreenContent.appendChild(directionsText);
     howToPlayScreenContent.appendChild(howToPlayItemDiv);

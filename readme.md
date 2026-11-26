@@ -21,6 +21,23 @@ Arrow keys: Move
 
 Space bar: Select letter / Pickup item / Cast spell
 
+On phones and tablets, use the on-screen arrows to move and the Action button to select a note, pick up an item, or cast a spell.
+
+## Mobile Apps
+
+The Android and iOS apps use Capacitor to package the existing web game.
+
+```bash
+npm install
+npx cap add android
+npx cap add ios
+npm run cap:sync
+npm run cap:open:android
+npm run cap:open:ios
+```
+
+Run `npm run cap:sync` after changing the web game to rebuild its local assets and sync both native projects. Android builds require Android Studio and the Android SDK; iOS builds require macOS and Xcode.
+
 ### Listen to the Soundtrack
 
 Listen to the original soundtrack here: [Melody Quest OST](https://soundcloud.com/dinitrogen-games)
