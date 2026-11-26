@@ -1,3 +1,5 @@
+import { App } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
 import { loadHowToPlayScreen } from './how-to-play.js';
 import { loadHighScoresScreen } from './high-scores.js';
 import { levels } from './levels.js';
@@ -194,6 +196,82 @@ function loadGameScreen() {
     mobileControls.appendChild(directionPad);
     mobileControls.appendChild(actionButton);
 
+    const menuButton = document.createElement('button');
+    menuButton.type = 'button';
+    menuButton.classList.add('gameMenuButton');
+    menuButton.setAttribute('aria-label', 'Open game menu');
+    menuButton.setAttribute('aria-haspopup', 'dialog');
+    menuButton.setAttribute('aria-controls', 'gameMenuDialog');
+    menuButton.setAttribute('aria-expanded', 'false');
+    for (let i = 0; i < 3; i++) {
+        const line = document.createElement('span');
+        line.setAttribute('aria-hidden', 'true');
+        menuButton.appendChild(line);
+    }
+
+    const gameMenuDialog = document.createElement('dialog');
+    gameMenuDialog.classList.add('gameMenuDialog');
+    gameMenuDialog.id = 'gameMenuDialog';
+    gameMenuDialog.setAttribute('aria-labelledby', 'gameMenuTitle');
+
+    const gameMenuTitle = document.createElement('h2');
+    gameMenuTitle.id = 'gameMenuTitle';
+    gameMenuTitle.textContent = 'Game Menu';
+
+    const gameMenuMessage = document.createElement('p');
+    gameMenuMessage.classList.add('gameMenuMessage');
+    gameMenuMessage.setAttribute('role', 'status');
+
+    const gameMenuActions = document.createElement('div');
+    gameMenuActions.classList.add('gameMenuActions');
+
+    const returnToTitleButton = document.createElement('button');
+    returnToTitleButton.type = 'button';
+    returnToTitleButton.classList.add('gameMenuOption');
+    returnToTitleButton.textContent = 'Return to Title';
+    returnToTitleButton.addEventListener('click', () => window.location.reload());
+
+    const exitGameButton = document.createElement('button');
+    exitGameButton.type = 'button';
+    exitGameButton.classList.add('gameMenuOption');
+    exitGameButton.textContent = 'Exit Game';
+    exitGameButton.addEventListener('click', async () => {
+        if (Capacitor.isNativePlatform()) {
+            try {
+                await App.exitApp();
+            } catch (error) {
+                console.error('Unable to exit the game.', error);
+                gameMenuMessage.textContent = 'Unable to exit. Close the app from Android.';
+            }
+            return;
+        }
+
+        gameMenuMessage.textContent = 'Close this browser tab to exit the game.';
+    });
+
+    const resumeButton = document.createElement('button');
+    resumeButton.type = 'button';
+    resumeButton.classList.add('gameMenuOption');
+    resumeButton.textContent = 'Resume';
+    resumeButton.addEventListener('click', () => gameMenuDialog.close());
+
+    gameMenuActions.appendChild(returnToTitleButton);
+    gameMenuActions.appendChild(exitGameButton);
+    gameMenuActions.appendChild(resumeButton);
+    gameMenuDialog.appendChild(gameMenuTitle);
+    gameMenuDialog.appendChild(gameMenuMessage);
+    gameMenuDialog.appendChild(gameMenuActions);
+
+    menuButton.addEventListener('click', () => {
+        gameMenuMessage.textContent = '';
+        menuButton.setAttribute('aria-expanded', 'true');
+        gameMenuDialog.showModal();
+    });
+    gameMenuDialog.addEventListener('close', () => {
+        menuButton.setAttribute('aria-expanded', 'false');
+        menuButton.focus();
+    });
+
     const content = document.getElementById('content');
     content.textContent = '';
 
@@ -225,6 +303,8 @@ function loadGameScreen() {
     gameScreenContent.appendChild(centerContent);
     gameScreenContent.appendChild(rightContent);
     gameScreenContent.appendChild(mobileControls);
+    gameScreenContent.appendChild(menuButton);
+    gameScreenContent.appendChild(gameMenuDialog);
 
     content.appendChild(gameScreenContent);
 
@@ -405,6 +485,10 @@ function loadGameScreen() {
     }
 
     function handlePlayerAction(code, event) {
+        if (gameMenuDialog.open) {
+            return;
+        }
+
         let previousTileIndex = activeTileIndex,
             leftTile = (activeTileIndex % gridSize === 0) ? undefined : document.querySelector(`#tile${activeTileIndex - 1}`),
             rightTile = ((activeTileIndex + 1) % gridSize === 0) ? undefined : document.querySelector(`#tile${activeTileIndex + 1}`),
@@ -1436,6 +1520,10 @@ function loadGameScreen() {
     // TODO: combine this function with the above one
     function updateStaffDiv(note, octave) {
         staffDiv.innerHTML = '';
+        const promptLabel = document.createElement('span');
+        promptLabel.classList.add('staffPromptLabel');
+        promptLabel.textContent = 'Find this note:';
+        staffDiv.appendChild(promptLabel);
         staffDiv.appendChild(createTrebleStaffNote(note, octave));
     }
 
