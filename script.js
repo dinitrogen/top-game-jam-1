@@ -2486,8 +2486,6 @@ function createReturnButton() {
     returnButton.classList.add('gameButton');
     returnButton.setAttribute('id', 'returnButton');
     returnButton.textContent = 'Back';
-    returnButton.style.margin = '0 200px';
-    returnButton.style.padding = '20px 0px 20px 0px';
     returnButton.addEventListener('click', () => {
         practiceModeStatus = false;
         loadNewGameScreen();

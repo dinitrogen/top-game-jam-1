@@ -20,7 +20,6 @@ function loadHighScoresScreen() {
 
     const resetScoresButton = document.createElement('button');
     resetScoresButton.classList.add('gameButton');
-    resetScoresButton.style.padding = '50px 0px 0px 0px';
     resetScoresButton.textContent = 'Reset scores';
     resetScoresButton.addEventListener('click', () => {
         let resetConfirm = prompt('Are you sure? type "yes"');

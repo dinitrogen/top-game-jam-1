@@ -972,19 +972,156 @@ body.gameScreenActive {
 @media (orientation: landscape) and (max-height: 600px) {
     html {
         height: 100%;
-    }
-
-    body.gameScreenActive {
-        box-sizing: border-box;
-        height: 100svh;
         overflow: hidden;
     }
 
-    body.gameScreenActive #content {
+    body {
+        box-sizing: border-box;
+        height: 100svh;
+        max-width: none;
+        min-height: 0;
+        padding: max(4px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right))
+            max(4px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+        overflow: hidden;
+    }
+
+    #content {
         box-sizing: border-box;
         height: 100%;
         min-height: 0;
         overflow: hidden;
+    }
+
+    .titleScreenContent,
+    .newGameScreenContent,
+    .creditsScreenContent {
+        box-sizing: border-box;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        padding: 2px 8px;
+        overflow: hidden;
+    }
+
+    .titleLogoDiv {
+        display: flex;
+        flex: 0 0 auto;
+        justify-content: center;
+        max-height: 40svh;
+    }
+
+    .titleLogo {
+        width: min(55vw, 350px);
+        height: min(40svh, 200px);
+        max-width: 100%;
+        object-fit: contain;
+    }
+
+    .startButtonDiv,
+    .newGameButtonDiv {
+        flex: 0 0 auto;
+        align-items: center;
+        width: 100%;
+    }
+
+    .gameButton {
+        margin: 2px auto;
+        padding: 4px 8px;
+        font-size: clamp(8px, 1.2vw, 12px);
+        line-height: 1.4;
+    }
+
+    .difficultyText,
+    .nameInputText {
+        padding: 4px 0;
+        font-size: clamp(9px, 1.3vw, 13px);
+    }
+
+    .creditsTitle {
+        padding: 3px 0 1px;
+        font-size: clamp(9px, 1.2vw, 12px);
+    }
+
+    .creditsText {
+        padding: 2px 0 0;
+        font-size: clamp(7px, 0.9vw, 9px);
+    }
+
+    #nameInput {
+        width: min(60vw, 320px);
+        height: 28px;
+        padding: 2px 6px;
+        font-size: clamp(9px, 1.2vw, 12px);
+    }
+
+    .returnButton,
+    #returnButton {
+        flex: 0 0 auto;
+        margin: 0 auto !important;
+        padding: 2px 8px !important;
+    }
+
+    .spacerDiv {
+        flex: 1 1 0;
+        min-height: 0;
+    }
+
+    .footerDiv {
+        flex: 0 0 auto;
+        padding: 2px 4px;
+    }
+
+    .footerText {
+        font-size: clamp(6px, 0.8vw, 8px);
+    }
+
+    .howToPlayScreenContent,
+    .highScoresScreenContent {
+        box-sizing: border-box;
+        width: 100%;
+        height: calc(100% - 48px);
+        min-height: 0;
+        padding: 6px 10px;
+        overflow: hidden;
+        font-size: clamp(6px, 0.85vw, 9px);
+        line-height: 1.2;
+    }
+
+    .howToPlayScreenContent h1,
+    .highScoresScreenContent h1 {
+        margin: 2px 0;
+        font-size: 1.4em;
+    }
+
+    .howToPlayScreenContent h2 {
+        margin: 2px 0;
+        font-size: 1.15em;
+    }
+
+    .howToPlayScreenContent p,
+    .highScoresScreenContent p {
+        margin: 2px 0;
+    }
+
+    .howToPlayItemDiv {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 4px;
+    }
+
+    .howToPlayItemDiv > div {
+        display: flex;
+        align-items: center;
+        width: 19%;
+        font-size: clamp(5px, 0.65vw, 7px);
+    }
+
+    .howToPlayItemDiv object {
+        flex: 0 0 auto;
+        width: 16px;
+        height: 16px;
+        padding: 0;
     }
 
     #gameScreenContent {
@@ -997,30 +1134,49 @@ body.gameScreenActive {
             "controls controls controls";
         gap: 4px 8px;
         align-items: stretch;
+        overflow: hidden;
     }
 
     .gameScreenSectionLeft,
     .gameScreenSectionRight {
+        min-height: 0;
         max-height: 100%;
-        overflow-y: auto;
-        overscroll-behavior: contain;
+        overflow: hidden;
     }
 
     .gameScreenSectionCenter {
-        justify-content: center;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr);
+        justify-items: center;
         min-height: 0;
     }
 
+    .practiceStaff {
+        width: auto;
+        height: clamp(36px, 9vh, 44px);
+        object-fit: contain;
+    }
+
     .gameMapContainer {
-        flex: 0 1 auto;
-        width: min(100%, calc(100svh - 170px));
+        grid-row: 2;
+        width: auto;
+        height: 100%;
+        max-width: 100%;
         max-height: 100%;
+        aspect-ratio: 1;
+        align-self: center;
+        justify-self: center;
     }
 
     .gameMap {
-        width: 88%;
-        height: 88%;
+        width: 96%;
+        height: 96%;
         margin: 0;
+    }
+
+    .gameTile {
+        font-size: clamp(5px, 0.8vw, 8px);
     }
 
     .mobileControls {
@@ -1058,17 +1214,38 @@ body.gameScreenActive {
     #spellDisplay,
     #bossDisplay,
     .timerDisplay {
-        font-size: clamp(8px, 1.45vw, 12px);
-        padding-top: 2px;
-        padding-bottom: 2px;
+        font-size: clamp(8px, 1vw, 11px);
+        padding-top: 1px;
+        padding-bottom: 1px;
+    }
+
+    .multiplierDiv {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .multiplierBorder {
+        flex: 1 1 auto;
+        width: auto;
+        min-width: 0;
+    }
+
+    .multiplierText {
+        flex: 0 0 auto;
+        padding: 0;
     }
 
     .multiplierHeader {
-        padding-top: 4px;
+        padding-top: 3px;
+    }
+
+    .levelProgressDiv {
+        padding-top: 2px;
     }
 
     .levelProgressText {
-        line-height: 1.4;
+        line-height: 1.2;
     }
 
     .multiplierBorder,
@@ -1076,12 +1253,19 @@ body.gameScreenActive {
     .spellBarBorder,
     .bossBarBorder,
     .timerBarBorder {
-        height: 14px;
-        padding: 3px;
+        height: 12px;
+        padding: 2px;
     }
 
     .staffDiv {
-        padding-top: 4px;
+        width: 100%;
+        padding-top: 2px;
+    }
+
+    .svgNote {
+        width: auto;
+        height: clamp(44px, 12vh, 60px);
+        max-width: 100%;
     }
 }
 

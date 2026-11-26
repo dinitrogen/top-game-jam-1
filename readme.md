@@ -27,6 +27,8 @@ On phones and tablets, use the on-screen arrows to move and the Action button to
 
 The Android and iOS apps use Capacitor to package the existing web game.
 
+The Android app opens in landscape for gameplay; the iOS app supports both portrait and landscape.
+
 ```bash
 npm install
 npx cap add android
