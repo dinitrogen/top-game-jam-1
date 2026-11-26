@@ -38,6 +38,10 @@ npm run cap:open:ios
 
 Run `npm run cap:sync` after changing the web game to rebuild its local assets and sync both native projects. Android builds require Android Studio and the Android SDK; iOS builds require macOS and Xcode.
 
+#### Build an Android APK without a computer
+
+GitHub Actions builds a debug APK when changes are pushed to `feature/mobile-port`. To start a build from a phone, open the repository on GitHub, go to **Actions** → **Build Android APK** → **Run workflow**, and select `feature/mobile-port`. When the run finishes, open it and download the `melody-quest-debug-apk` artifact. Extract the downloaded ZIP and tap `app-debug.apk` to install it; Android may ask you to allow installs from that browser or file manager.
+
 ### Listen to the Soundtrack
 
 Listen to the original soundtrack here: [Melody Quest OST](https://soundcloud.com/dinitrogen-games)
